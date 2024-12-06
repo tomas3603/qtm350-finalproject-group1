@@ -1,0 +1,50 @@
+Broad Theme: Exploring the Relationship between Education Quality* and Productivity* in (we can compare several countries / regions) 
+  Questions to Ask:
+    Why? - ***political/economic institutions largely influence the level of education / output / tech, so we can take a look at countries that have recently reformed
+           their public education sectors, or other things of the nature and see if we can identify an increase in education and/or output (gdp, gdp per capita)
+    How can we identify countries with 'good' education systems?
+      - some research on countries who've reformed education
+      - ****look at countries with high schooling rates
+      - compare nearby countries whose education systems are significantly different
+      
+      
+
+
+
+
+
+***Use 'Why Nations Fail" as a baseline? - research which won nobel prize in econ this year, essentially attributes a countries success to how good their institutions are
+      - we can sue this as evidence, or atleast a reason to explore education vs gdp and compare countries
+  - countries with 'exclusive' education sectors vs 'inclusive'
+    - cost of school? is there a public school system? 
+    - look at gov expenditure in the education sector
+    - look at compulsory schooling years required
+    - "The low education level of poor countries is caused by economic
+institutions that fail to create incentives for parents to educate their
+children and by political institutions that fail to induce the
+government to build, finance, and support schools and the wishes of
+parents and children. The price these nations pay for low education of
+their population and lack of inclusive markets is high" (93)
+
+****Specific countries / regions
+    - https://www.semanticscholar.org/paper/The-Effect-of-Education-Expenditure-on-Per-Capita-Appiah/60b0ad7223c9ba54c73af7d3327476d51fe05933?p2df
+      - research which indicate increased expenditure on education (public and private) in developing countries, including Sub-Saharan Africa positively affects GDP per Capita
+      
+      African Countries which have reformed education recently:
+        Niger, Mali, Senegal - https://sahelresearch.africa.ufl.edu/research/religion-politics-educational-reform/#:~:text=Three%20Sahelian%20countries,be%20considered%20new%20hybrid%20systems.
+          - could explore these and see if their GDPs have changed drastically
+      
+      Similarly, Central American countries who've reformed education:
+        Nicaragua: https://borgenproject.org/reforming-education-in-nicaragua/#:~:text=Reforming%20education%20in%20Nicaragua%20has,in%20primary%20or%20secondary%20education.
+          - reformed education in 2015
+          "In 2017, the government redirected approximately 4% of the entire national GDP to MINED. The repairs that have been done since then directly benefit countless public schools,
+          especially in terms of providing better study conditions to the many children that go to these.
+          In 2020 alone there have been four reform initiatives focusing on infrastructure reconstruction, student hygiene and health, drug awareness
+          and increasing disability awareness within school institutions and curriculum."
+
+        Costa Rica: https://revista.drclas.harvard.edu/the-evolution-of-education-in-costa-rica-challenges-and-opportunities/
+          - has had very strong education for a while
+          - 
+      
+
+  
