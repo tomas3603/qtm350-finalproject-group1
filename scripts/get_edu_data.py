@@ -4,7 +4,7 @@ import wbdata
 import pandas as pd
 import psycopg2
 from psycopg2.extras import execute_values
-start_year = 2013
+start_year = 2003
 end_year = 2022
 
 codes = pd.read_csv('data/codes_top20.csv')

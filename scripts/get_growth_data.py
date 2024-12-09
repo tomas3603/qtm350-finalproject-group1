@@ -8,7 +8,7 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 # Parameters
-start_year = 2013
+start_year = 2003
 end_year = 2022
 indicator = "NY.GDP.PCAP.KD.ZG"  # GDP per capita growth (annual %)
 regions = ["SSF", "LCN"]  # Sub-Saharan Africa, Latin America & Caribbean
@@ -17,7 +17,7 @@ regions = ["SSF", "LCN"]  # Sub-Saharan Africa, Latin America & Caribbean
 all_countries = get_countries()
 filtered_countries = [c['id'] for c in all_countries if c['region']['id'] in regions]
 
-# Fetch data for the last 10 years for these countries using wbdata api
+# Fetch data for the last 20 years for these countries using wbdata api
 data = wbdata.get_dataframe({indicator: 'value'}, country=filtered_countries, date=(datetime.datetime(start_year, 1, 1), datetime.datetime(end_year, 12, 31)))
 
 # Pivot the data to have the index be the country and the columns be the years
@@ -29,11 +29,11 @@ data = data.dropna(thresh=data.shape[1] - 5)
 data = data.apply(lambda row: row.fillna(row.mean()), axis=1)
 
 # Calculate the average growth over the time period for each country
-data['avg_growth_10yr'] = data.mean(axis=1)
+data['avg_growth_20yr'] = data.mean(axis=1)
 
 # Select the top 20 countries with the highest average growth and sort by the avg
-top_20_df = data.nlargest(20, 'avg_growth_10yr')
-top_20_df.sort_values(by = 'avg_growth_10yr', ascending=False, inplace=True)
+top_20_df = data.nlargest(20, 'avg_growth_20yr')
+top_20_df.sort_values(by = 'avg_growth_20yr', ascending=False, inplace=True)
 
 # Get the country code for the top 20 countries
 country_codes = {country['name']: country['id'] for country in all_countries}
@@ -70,6 +70,16 @@ DROP TABLE IF EXISTS gdp_growth_top20;
 CREATE TABLE IF NOT EXISTS gdp_growth_top20 (
     country TEXT,
     country_code TEXT,
+    Y2003 NUMERIC,
+    Y2004 NUMERIC,
+    Y2005 NUMERIC,
+    Y2006 NUMERIC,
+    Y2007 NUMERIC,
+    Y2008 NUMERIC,
+    Y2009 NUMERIC,
+    Y2010 NUMERIC,
+    Y2011 NUMERIC,
+    Y2012 NUMERIC,
     Y2013 NUMERIC,
     Y2014 NUMERIC,
     Y2015 NUMERIC,
@@ -80,7 +90,7 @@ CREATE TABLE IF NOT EXISTS gdp_growth_top20 (
     Y2020 NUMERIC,
     Y2021 NUMERIC,
     Y2022 NUMERIC,
-    avg_growth_10yr NUMERIC
+    avg_growth_20yr NUMERIC
 );
 """
 cur.execute(create_table_query)
@@ -96,8 +106,6 @@ for col in insert_df.columns:
     if col.isdigit():
         insert_df.rename(columns={col: 'Y' + col}, inplace=True)
 
-# Now insert_df should have columns:
-# ['country', 'Y2013', 'Y2014', ..., 'Y2022', 'avg_growth_10yr', 'country_code']
 
 # Extract column names from DataFrame
 cols = insert_df.columns.tolist()
