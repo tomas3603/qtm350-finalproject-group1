@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 growth_data = pd.read_csv('data/gdp_growth_top20.csv')
 growth_data.drop(columns=['country_code', 'avg_growth_20yr'], inplace=True)
 
+
 # Melt the DataFrame so that 'year' becomes a variable column and 'value' holds the gdp growth
 long_df = growth_data.melt(id_vars='country', var_name='year', value_name='gdp_growth')
 
@@ -12,6 +13,8 @@ long_df['year'] = long_df['year'].astype(int)
 
 # Create the line plot
 fig, ax = plt.subplots(figsize=(10, 6))
+ax.tick_params(axis='x', rotation=45)
+
 
 # Group by country and plot each group's data
 for ctry, grp in long_df.groupby('country'):

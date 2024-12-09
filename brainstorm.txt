@@ -6,6 +6,7 @@ i. get gdp per capita growth data, select 10-20 with highest avg growth in the l
 ii. plot and describe the growth 
   describe_top20_growth.py -> top20_growth_hist.png
   growth_linplot.py -> growth_lineplot.png
+    -this plot shows that many of these countries exhibited pretty consistent growth pre-covid, and several of them bounced back pretty well - likely a factor in why they are top 20.
 
 
 
