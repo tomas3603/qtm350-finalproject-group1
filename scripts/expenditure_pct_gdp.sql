@@ -6,12 +6,13 @@ WITH country_stats AS (
            AVG(gov_expenditure_edu_pct_gdp) AS country_avg,
            COUNT(gov_expenditure_edu_pct_gdp) AS nonnull_count
     FROM education_data
-    WHERE year BETWEEN 2003 AND 2022
+    WHERE year BETWEEN 2002 AND 2022
     GROUP BY country_name
     HAVING COUNT(gov_expenditure_edu_pct_gdp) >= 15
 )
 SELECT 
     ed.country_name,
+    COALESCE(MAX(CASE WHEN year = 2002 THEN gov_expenditure_edu_pct_gdp END), cs.country_avg) AS Y2002,
     COALESCE(MAX(CASE WHEN year = 2003 THEN gov_expenditure_edu_pct_gdp END), cs.country_avg) AS Y2003,
     COALESCE(MAX(CASE WHEN year = 2004 THEN gov_expenditure_edu_pct_gdp END), cs.country_avg) AS Y2004,
     COALESCE(MAX(CASE WHEN year = 2005 THEN gov_expenditure_edu_pct_gdp END), cs.country_avg) AS Y2005,
@@ -34,5 +35,5 @@ SELECT
     COALESCE(MAX(CASE WHEN year = 2022 THEN gov_expenditure_edu_pct_gdp END), cs.country_avg) AS Y2022
 FROM education_data ed
 JOIN country_stats cs ON ed.country_name = cs.country_name
-WHERE ed.year BETWEEN 2003 AND 2022
+WHERE ed.year BETWEEN 2002 AND 2022
 GROUP BY ed.country_name, cs.country_avg;

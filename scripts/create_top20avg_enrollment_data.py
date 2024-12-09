@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-# Connect to the database
 conn = psycopg2.connect(
         host='127.0.0.1',
         port='5433',
@@ -13,7 +12,7 @@ conn = psycopg2.connect(
     )
 cur = conn.cursor()
 
-years = range(2003, 2023)
+years = range(2002, 2023)
 primary_cols = ",\n       ".join([f"COALESCE(MAX(CASE WHEN year = {y} THEN primary_enrollment END), ca.avg_primary) AS p{y}" for y in years])
 secondary_cols = ",\n       ".join([f"COALESCE(MAX(CASE WHEN year = {y} THEN secondary_enrollment END), ca.avg_secondary) AS s{y}" for y in years])
 
@@ -42,18 +41,6 @@ colnames = [desc[0] for desc in cur.description]
 # Convert to DataFrame
 df = pd.DataFrame(rows, columns=colnames)
 
-
-
-
-
-
-
-
-print(df, df.shape)
-
-
-# Determine how many years of data each country has.
-# A "year of data" is defined as having at least one non-null in pYYYY or sYYYY
 year_has_data = []
 for _, row in df.iterrows():
     count = 0
@@ -70,46 +57,74 @@ df['years_of_data'] = year_has_data
 # Keep only countries with at least 15 years of data
 df = df[df['years_of_data'] >= 15].drop(columns='years_of_data')
 
-# 2. Forward fill missing values.
-# We need to forward fill along the timeline (2003 to 2022).
-# We'll do this separately for primary and secondary columns to avoid mixing them.
-
 primary_cols = [f"p{y}" for y in years]
 secondary_cols = [f"s{y}" for y in years]
 
-# Sort columns by year just to be sure they are in order (they likely are already)
 df = df[['country_name'] + primary_cols + secondary_cols]
 
-# Forward fill primary enrollment data row-wise
-# We'll apply a forward fill across columns for each row.
 def forward_fill_across_years(row, cols):
-    # We will iterate through the cols and if we find a NaN, fill with previous non-NaN
     for i in range(1, len(cols)):
         if pd.isna(row[cols[i]]):
-            row[cols[i]] = row[cols[i-1]]
+            prev_val = row[cols[i-1]]
+            
+            # Check if there's a next column and that it's not missing
+            if i < len(cols)-1 and not pd.isna(row[cols[i+1]]):
+                next_val = row[cols[i+1]]
+                # Use the average of prev_val and next_val
+                row[cols[i]] = (prev_val + next_val) / 2
+            else:
+                # If no next value is available, fall back to prev_val
+                row[cols[i]] = prev_val
     return row
+
 
 df = df.apply(lambda r: forward_fill_across_years(r, primary_cols), axis=1)
 df = df.apply(lambda r: forward_fill_across_years(r, secondary_cols), axis=1)
 
-# The DataFrame now has forward-filled values for missing years, based on the previous year's value.
+def backward_fill_across_years(row, cols):
+    # Start from the last column and move backwards
+    for i in range(len(cols)-2, -1, -1):  # from second-last to first
+        if pd.isna(row[cols[i]]):
+            row[cols[i]] = row[cols[i+1]]
+    return row
 
-# Note:
-# If the first year's data (e.g., p2003 or s2003) was missing, it won't get imputed since there's no previous year.
-# If you need to handle that case differently, you might consider dropping that country or using another imputation strategy.
+df = df.apply(lambda r: backward_fill_across_years(r, primary_cols), axis=1)
+df = df.apply(lambda r: backward_fill_across_years(r, secondary_cols), axis=1)
 
-# At this point, 'df' contains only countries with >=15 years of data, and missing values within
-# those rows have been forward filled from previous years.
+numeric_cols = [col for col in df.columns if col.startswith('p') or col.startswith('s')]
 
-# You can now proceed with additional analysis or saving the DataFrame.
-
-print(df)
-
-
-
-
+for col in numeric_cols:
+    df[col] = df[col].astype(float)
 
 
-# Close the connection
+avg_df = df[['country_name']].copy()
+for y in years:
+    avg_col = str(y)  # name the average column simply as year
+    avg_df[avg_col] = (df[f"p{y}"] + df[f"s{y}"]) / 2.0
+
+avg_df.to_csv("data/avg_top20_enrollment.csv", index=False)
+
+print(avg_df)
+print("Succesfully saved average enrollment data as csv in data")
+
+growth_df = avg_df.copy()
+
+# Compute growth for each subsequent year compared to the previous year
+for y in years:
+    if y == 2002:
+        continue
+    prev_year = y - 1
+    # percentage growth:
+    growth_df[str(y)] = ((avg_df[str(y)] - avg_df[str(prev_year)]) / avg_df[str(prev_year)]) * 100
+
+
+
+growth_df.drop(columns=['2002'], inplace=True)
+
+growth_df.to_csv("data/top20_enrollment_growth.csv")
+
+print("Saved enrollment growth data")
+print(growth_df)
+
 cur.close()
 conn.close()
