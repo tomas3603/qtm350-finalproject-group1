@@ -1,3 +1,17 @@
+Amongst the fastest growing countries in Sub-Saharan Africa, Latin America and the Carribean, which have seen
+proportional growth in the education sector?
+
+i. get gdp per capita growth data, select 10-20 with highest avg growth in the last 10 years
+ii. 
+
+
+
+
+
+
+
+
+
 Broad Theme: Exploring the Relationship between Education Quality* and Productivity* in (we can compare several countries / regions) 
   Questions to Ask:
     Why? - ***political/economic institutions largely influence the level of education / output / tech, so we can take a look at countries that have recently reformed
@@ -8,11 +22,6 @@ Broad Theme: Exploring the Relationship between Education Quality* and Productiv
       - compare nearby countries whose education systems are significantly different
       
       
-
-
-
-
-
 ***Use 'Why Nations Fail" as a baseline? - research which won nobel prize in econ this year, essentially attributes a countries success to how good their institutions are
       - we can sue this as evidence, or atleast a reason to explore education vs gdp and compare countries
   - countries with 'exclusive' education sectors vs 'inclusive'
