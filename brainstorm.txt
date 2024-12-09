@@ -2,7 +2,9 @@ Amongst the fastest growing countries in Sub-Saharan Africa, Latin America and t
 proportional growth in the education sector?
 
 i. get gdp per capita growth data, select 10-20 with highest avg growth in the last 10 years
-ii. 
+  scripts\top20countriesDF -> top_20_countries_gdp_growth
+ii. plot and describe the growth 
+  describe_top20_growth.py -> top20_growth_hist.png
 
 
 
