@@ -16,6 +16,7 @@ regions = ["SSF", "LCN"]  # Sub-Saharan Africa, Latin America & Caribbean
 # Get countries in Sub-Saharan Africa, Latin American and the Caribbean
 all_countries = get_countries()
 filtered_countries = [c['id'] for c in all_countries if c['region']['id'] in regions]
+filtered_countries.append('WLD')
 
 # Fetch data for the last 20 years for these countries using wbdata api
 data = wbdata.get_dataframe({indicator: 'value'}, country=filtered_countries, date=(datetime.datetime(start_year, 1, 1), datetime.datetime(end_year, 12, 31)))
@@ -30,10 +31,19 @@ data = data.apply(lambda row: row.fillna(row.mean()), axis=1)
 
 # Calculate the average growth over the time period for each country
 data['avg_growth_20yr'] = data.mean(axis=1)
+# Select the top 20 countries with the highest average growth, excluding 'WLD'
+top_20_df = data.drop('WLD', errors='ignore').nlargest(20, 'avg_growth_20yr')
 
-# Select the top 20 countries with the highest average growth and sort by the avg
-top_20_df = data.nlargest(20, 'avg_growth_20yr')
-top_20_df.sort_values(by = 'avg_growth_20yr', ascending=False, inplace=True)
+print(data)
+
+# Get 'WLD' data
+wld_data = data.loc[['World']]
+
+# Combine 'WLD' data with top 20 data
+top_20_df = pd.concat([top_20_df, wld_data])
+
+# Sort the DataFrame by 'avg_growth_20yr' in descending order
+top_20_df.sort_values(by='avg_growth_20yr', ascending=False, inplace=True)
 
 # Get the country code for the top 20 countries
 country_codes = {country['name']: country['id'] for country in all_countries}
