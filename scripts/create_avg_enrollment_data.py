@@ -102,7 +102,7 @@ for y in years:
     avg_col = str(y)  # name the average column simply as year
     avg_df[avg_col] = (df[f"p{y}"] + df[f"s{y}"]) / 2.0
 
-avg_df.to_csv("data/avg_top20_enrollment.csv", index=False)
+avg_df.to_csv("data/avg_enrollment.csv", index=False)
 
 print(avg_df)
 print("Succesfully saved average enrollment data as csv in data")
@@ -121,7 +121,7 @@ for y in years:
 
 growth_df.drop(columns=['2002'], inplace=True)
 
-growth_df.to_csv("data/top20_enrollment_growth.csv")
+growth_df.to_csv("data/avg_enrollment_growth.csv")
 
 print("Saved enrollment growth data")
 print(growth_df)

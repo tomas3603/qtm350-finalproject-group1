@@ -61,3 +61,8 @@ their population and lack of inclusive markets is high" (93)
       
 
   
+Now we have two datasets:
+top20_enrollment.csv - which has a 'country_name' column, and columns for the years 2003-2022, where the values are the average of the primary and secondary schooling enrollment rates for each country for each year.
+
+gdp_growth_top20.csv - which has a 'country_name' column, and columns for the years 2003-2022, where the values are the growth in gdp per capita.
+
