@@ -63,6 +63,7 @@ cur = conn.cursor()
 
 # Create the table if it doesn't exist
 create_table_query = """
+DROP TABLE IF EXISTS gdp_growth_top20;
 CREATE TABLE IF NOT EXISTS gdp_growth_top20 (
     country TEXT,
     country_code TEXT,
