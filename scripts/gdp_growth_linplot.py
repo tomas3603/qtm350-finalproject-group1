@@ -34,6 +34,6 @@ ax.legend(title='Country', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 
 # Save the plot to the figures folder
-plt.savefig('figures/growth_lineplot.png')
+plt.savefig('figures/gdp_growth_lineplot.png')
 
 plt.show()

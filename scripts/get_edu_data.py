@@ -18,13 +18,8 @@ indicators = {
     "SE.PRM.ENRR": "primary_enrollment",
     "SE.SEC.ENRR": "secondary_enrollment",
     "SE.TER.ENRR": "tertiary_enrollment",
-    "SE.COM.DURS": "compulsory_edu_duration",
-    "SE.XPD.CTOT.ZS": "current_edu_expenditure_pct_total_public",
-    "SE.XPD.TOTL.GD.ZS": "gov_expenditure_edu_pct_gdp",
-    "SE.XPD.PRIM.PC.ZS": "gov_exp_student_primary_pct_gdp_per_capita",
-    "SE.XPD.SECO.PC.ZS": "gov_exp_student_secondary_pct_gdp_per_capita",
-    "SE.XPD.TERT.PC.ZS": "gov_exp_student_tertiary_pct_gdp_per_capita"
-}
+    "SE.XPD.TOTL.GD.ZS": "gov_expenditure_edu_pct_gdp"
+    }
 
 # Retrieve the data from wbdata
 data_edu = wbdata.get_dataframe(
@@ -58,12 +53,7 @@ CREATE TABLE education_data (
     primary_enrollment NUMERIC,
     secondary_enrollment NUMERIC,
     tertiary_enrollment NUMERIC,
-    compulsory_edu_duration NUMERIC,
-    current_edu_expenditure_pct_total_public NUMERIC,
-    gov_expenditure_edu_pct_gdp NUMERIC,
-    gov_exp_student_primary_pct_gdp_per_capita NUMERIC,
-    gov_exp_student_secondary_pct_gdp_per_capita NUMERIC,
-    gov_exp_student_tertiary_pct_gdp_per_capita NUMERIC
+    gov_expenditure_edu_pct_gdp NUMERIC
 );
 """
 cur.execute(create_table_query)

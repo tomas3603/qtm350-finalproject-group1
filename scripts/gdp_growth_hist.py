@@ -32,6 +32,6 @@ ax.legend()
 plt.tight_layout()
 
 # Save the figure to the 'figures' folder with the title "top20_growth_hist"
-plt.savefig('figures/top20_growth_hist.png')
+plt.savefig('figures/top20_gdp_growth_hist.png')
 
 plt.show()
