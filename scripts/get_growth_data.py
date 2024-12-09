@@ -41,13 +41,16 @@ country_codes = {country['name']: country['id'] for country in all_countries}
 # Add the country code as a new column
 top_20_df['country_code'] = top_20_df.index.map(country_codes)
 
-print(top_20_df)
+print(top_20_df.head())
 
 # Save the top 20 dataframe to a CSV file in the data folder
-data_path = os.path.join('data', 'top_20_countries_gdp_growth.csv')
-
-# Save the DataFrame as a CSV in the data folder
+data_path = os.path.join('data', 'gdp_growth_top20.csv')
 top_20_df.to_csv(data_path, index=True)
+
+# Save the codes for the top 20 to a CSV file
+codes_top20 = (top_20_df['country_code'])
+path = os.path.join('data', 'codes_top20.csv')
+codes_top20.to_csv(path)
 
 
 # Connect to your PostgreSQL database

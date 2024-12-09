@@ -2,7 +2,6 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-
 data_path = os.path.join('data', 'top_20_countries_gdp_growth.csv')
 data = pd.read_csv(data_path)
 
