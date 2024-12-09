@@ -2,8 +2,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-data_path = os.path.join('data', 'top_20_countries_gdp_growth.csv')
-data = pd.read_csv(data_path)
+data = pd.read_csv('data/gdp_growth_top20.csv')
 
 fig, ax = plt.subplots(figsize=(12, 6))
 
