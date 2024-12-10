@@ -1,0 +1,189 @@
+---
+title: "QTM 350 Final"
+author: 
+  - name: Howie Brown (2585210)
+  - name: Leila Buchan (2550498)
+  - name: Gabe Schwartz (2545628)
+  - name: Tomas Hossain-Aguilar (2582623)
+format: pdf
+engine: jupyter 
+editor: 
+    render-on-save: true
+---
+
+# Introduction 
+Gross Domestic Product (GDP) growth serves as a cornerstone of economic analysis, reflecting the pace at which an economy expands and evolves over time. A consistently growing GDP is often associated with improved living standards, increased employment opportunities, and enhanced government capacity to fund public goods and services. However, the drivers and correlates of GDP growth are complex and multifaceted, often intersecting with other critical societal domains such as education. Education, as a key enabler of human capital development, plays a pivotal role in sustaining and enhancing economic growth, fostering innovation, and reducing inequality.
+
+Our project aims to delve into the dynamics of GDP growth by focusing on the top 20 countries that have exhibited the highest economic growth rates over the past two decades. By examining this select group, we seek to uncover patterns and shared characteristics that might illuminate the factors contributing to their remarkable economic trajectories. Beyond mere economic performance, our study investigates how these nations have engaged with education during this period. Specifically, we analyze their educational engagement, including metrics like school enrollment rates, literacy levels, and government expenditure on education, to understand the interplay between economic growth and educational investment.
+
+To ensure a robust and comprehensive analysis, we utilize data from the World Bank’s World Development Indicators (WDI) database. This extensive dataset includes over 1,600 indicators spanning 200+ countries from 1960 to 2023, providing a rich foundation for exploring trends in GDP growth and educational outcomes. By synthesizing these data points, our research aims to offer nuanced insights into how investments in education may reinforce or lag behind economic expansion, shedding light on the long-term sustainability of growth in the world's most rapidly advancing economies
+
+## Literature Review and Background Research
+Education has long been recognized as a critical factor for economic growth and development.
+Across multiple studies, the relationship between educational investment and GDP highlights
+how fostering human capital through education can generate significant economic benefits.
+This review synthesizes general findings from recent literature on the topic, with a specific
+focus on its implications for developing economies. The contribution of education to economic
+growth is underscored by its ability to enhance human capital. Education improves labor
+productivity by equipping individuals with essential skills, fostering innovation, and enabling
+workers to perform complex tasks more effectively. In developing countries, investment in
+education plays a pivotal role in transitioning economies from agrarian to industrial bases.
+Education also acts as a multiplier for other growth factors. According to Schultz (1961),
+investments in education yield returns analogous to physical capital investments, particularly in
+contexts where labor-intensive growth strategies dominate. In models such as those developed
+by Lucas and Romer, human capital is depicted as an engine for endogenous growth, amplifying
+the effects of technological and physical capital investments. The quality of education is as
+important as its accessibility. Hanushek (2013) emphasizes that cognitive skills, rather than
+mere school enrollment or years of schooling, are critical drivers of economic productivity.
+Without quality improvements, the impact of educational investments may remain subdued,
+particularly in developing economies where skill deficits are pronounced.
+Moreover, Judson (1998) highlights the importance of the efficient allocation of educational
+resources. Over-investment in higher education at the expense of primary education, for example, can diminish the returns on education in low-income countries. Universal primary
+education often generates the highest returns because it equips the broadest segment of the
+population with foundational skills necessary for economic participation. Empirical evidence
+from Kenya and other developing countries illustrates how education expenditure contributes
+to economic growth. For example, Otieno (2016) demonstrates that in Kenya, a 1% increase
+in education expenditure per worker correlates with a 0.5% increase in long-term GDP growth.
+Such findings validate the argument that education serves as a catalyst for productivity and
+development. However, the results also reveal challenges. Inefficiencies in spending and externalities such as socio-political instability can dilute the potential returns of educational
+investments. The Kenyan case shows that despite allocating 30% of its budget to education,
+economic growth remains modest. This outcome underscores the need for integrated policies
+that address complementary sectors like health and infrastructure alongside education.
+Educational investment is a cornerstone of sustainable economic growth in developing
+economies. While its benefits are clear, realizing the full potential of education requires a
+holistic approach that combines quality improvements, strategic resource allocation, and
+integration with broader development policies. The evidence strongly supports increased
+prioritization of education in national budgets, emphasizing not just access but also the
+alignment of education with the specific economic needs of developing nations. Thus our research aims to delve into not just education investment as a whole, but also how different
+kinds of educational investment impact economic outcomes.
+
+
+# Data Description
+The data used in this study is pulled from the World Bank’s World Development Indicators (WDI) database. The dataset contains information from 200+ countries, with 1,600+ indicators from 1960 to 2023. 
+
+Variables used:
+
+![Data Selection](data.png)
+
+# Data Analysis 
+
+This shows the line plot of GDP per Capita Growth depending on the year @gdp-growth-line
+
+```{python}
+#| label: gdp-growth-line
+#| fig-cap: "GDP per Capita Growth Line Plot"
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+growth_data = pd.read_csv('gdp_growth_top20.csv')
+growth_data.drop(columns=['country_code', 'avg_growth_20yr'], inplace=True)
+
+# Melt the DataFrame so that 'year' becomes a variable column and 'value' holds the gdp growth
+long_df = growth_data.melt(id_vars='country', var_name='year', value_name='gdp_growth')
+
+# Convert 'year' to a numeric type if it's not already
+long_df['year'] = long_df['year'].astype(int)
+
+# Create the line plot
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.tick_params(axis='x', rotation=45)
+
+# Group by country and plot each group's data
+for ctry, grp in long_df.groupby('country'):
+    color = 'black' if ctry == 'World' else None
+    ax.plot(grp['year'], grp['gdp_growth'], label=ctry, marker='o', color=color)
+
+# Set x-axis ticks to integer years
+years = sorted(long_df['year'].unique())
+ax.set_xticks(years)
+
+# Labeling the plot
+ax.set_xlabel('Year')
+ax.set_ylabel('GDP per Capita Growth (%)')
+ax.set_title('GDP per Capita Growth Over Time (2003-2022)')
+
+# Create a legend
+ax.legend(title='Country', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+plt.tight_layout()
+plt.show()
+```
+
+This shows the bar graph of GDP per Capita Growth depending on the countries @gdp-growth-hist
+
+```{python}
+#| label: gdp-growth-hist
+#| fig-cap: "GDP per Capita Growth Bar Chart"
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the data
+data = pd.read_csv('gdp_growth_top20.csv')
+
+# Extract the global average (World)
+world_avg = data.loc[data['country'] == 'World', 'avg_growth_20yr'].values[0]
+
+# Filter out the 'World' row from the DataFrame so we only have the top 20 countries
+data_countries = data[data['country'] != 'World']
+
+fig, ax = plt.subplots(figsize=(12, 6))
+
+# Create a bar plot with countries on the x-axis and avg_growth_20yr on the y-axis
+ax.bar(data_countries['country'], data_countries['avg_growth_20yr'], color='skyblue')
+
+# Add a horizontal line at the global average
+ax.axhline(y=world_avg, color='red', linestyle='--', label=f'World Avg: {world_avg:.2f}%')
+
+# Rotate x-axis labels for better readability
+plt.xticks(rotation=45, ha='right')
+
+# Add labels and title
+plt.xlabel('Country')
+plt.ylabel('Average GDP Growth (20-year)')
+plt.title('Top 20 Countries by Average GDP Per Capita Growth vs. Global Average')
+
+# Add legend
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+The correlation heatmap showing the complex relationship between average GDP growth, enrollment growth at primary/secondary and tertiary levels, and educational expenditure growth @correlation
+
+```{python}
+#| label: correlation
+#| fig-cap: "GDP per Capita Growth vs Education Enrollment Matrix"
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("averaged_full.csv")
+
+corr_matrix = df.drop(columns=['year']).corr()
+
+print(corr_matrix)
+
+plt.figure(figsize=(16, 12))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Between Growth in GDP per Capita vs. Primary and Secondary Schooling\nEnrollment Rates on Average')
+plt.show()
+```
+
+# Results and Discussions
+For figure 1, most countries closely tracked the global (World) trend in GDP per capita growth from 2003 to 2022, showing steady moderate increases until a steep drop around 2020, coinciding with the onset of the COVID-19 pandemic. This dip is evident across nearly all lines, reflecting the worldwide economic disruption. While most countries rebounded similarly to the global average, one or two outliers diverged significantly, showing sharp spikes in subsequent years. Overall, about 18 of the 20 countries followed patterns largely consistent with the global trend, with COVID-19 causing a clear, temporary plunge in growth rates. Except for Guyana which experienced a large GDP increase during this pandemic due to oil offshoring (World Bank). 
+
+For figure 2, the bar chart shows the top 20 countries by their average 20-year GDP per capita growth rates, compared against the global average of 1.79%. The same pattern is seen here where Guyana leads by a wide margin, followed by Ethiopia and Rwanda, all substantially outperforming the global benchmark. The rest of the top 20 countries also have consistently higher growth rates than the world average, reflecting how strong the growth in these countries has been. This visualization makes it easier to see which country is which and which has more growth than others, however it is impossible to see the year by year trend for each country.
+
+Lastly for figure 3, while GDP growth shows modest positive correlations with enrollment growth (0.19) and tertiary enrollment growth (0.3), while these links are relatively weak, it does suggest that there is some effect of increase in higher education on growth in GDP . In fact, the correlation between GDP growth and education expenditure growth is slightly negative (-0.16), implying that increased education spending does not immediately translate into economic gains. Within the education indicators themselves, a moderate correlation (0.47) between enrollment growth and tertiary enrollment growth indicates some alignment, but the generally low correlations between expenditure and other educational metrics indicate that funding alone does not guarantee improved outcomes. Overall, these findings underscore the complexity of translating educational inputs into broader economic benefits and suggest that policymakers need holistic strategies that target efficiency, alignment of resources, and long-term development goals.
+ 
+# Conclusions
+In this study, we set out to explore the relationship between economic growth and educational engagement by focusing on the top 20 countries with the highest GDP growth rates over the past two decades. The WDI required meticulous data cleaning to ensure accuracy and relevance, including handling missing values, standardizing metrics, and isolating the variables most pertinent to our research. To facilitate our analysis and present the results, we employed multiple visualization strategies to display the findings from the data. We used a line plot to show the difference between GDP per capita growth in the 20 selected countries over the past 20 years, compared to the world average GDP per capita growth. Second, a bar chart compares the same metric but as an average over the course of the two decades. Finally, a correlation matrix offered an in-depth view of the relationships between economic and educational variables, such as GDP growth, school enrollment rates, and educational expenditure. This matrix allowed us to identify significant positive or negative correlations and assess the strength of these relationships.
+
+We utilized Python and PostgreSQL to fetch country-level primary and secondary school enrollment data for the years 2002–2022, averaged missing values using forward and backward filling, filtered countries with at least 15 years of data, and then computed and exported both the average enrollments and their year-over-year growth rates to CSV files. We applied a similar strategy to calculate the tertiary enrollment rate in these countries. To calculate expenditures, we created code that retrieved education expenditure as a percentage of GDP from a PostgreSQL database, stored the raw data to a CSV file, filtered countries that had at least 15 years of data, used forward filling to handle missing values, then calculated the year-over-year percentage growth in expenditure for each country and saved the final results to another CSV file. To access the GDP data, we first filtered countries to those with limited missing data, imputed missing values using their row-averages, calculated each country’s average 20-year growth, and selected the top 20 performing countries along with the “World” data for context. After retrieving and attaching country codes, we saved the resulting table to CSV files and also inserted it into a PostgreSQL database, creating the necessary table if it did not exist.
+
+Finally we took these four datasets (GDP growth, enrollment growth, tertiary enrollment growth, and educational expenditure growth), removed all unwanted columns, and then averaged each metric across all remaining countries by year. After aligning column names, these yearly averages are combined side-by-side into a single DataFrame, resulting in a tidy table that shows the average growth values for all metrics by year.
+
+Overall, our analysis shows that while most countries broadly mirrored the world’s pattern of moderate GDP growth followed by a pandemic-induced downturn, a few outliers like Guyana diverged dramatically due to unique economic factors. Educational variables, such as enrollment rates and expenditure, demonstrated only weak correlations with GDP growth, indicating that these factors alone may not drive economic performance. Ultimately, these findings highlight the multifaceted nature of economic development and the need for comprehensive strategies that go beyond simply increasing educational inputs to achieve sustainable growth.
